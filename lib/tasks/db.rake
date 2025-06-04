@@ -26,12 +26,12 @@ namespace :db do
       task prepare: :environment do
         # Ensure test environment
         Rails.env = "test"
-        
+
         # Prepare main database
         Rake::Task["db:test:prepare"].invoke
-        
+
         # Prepare auxiliary databases
-        ["cache", "queue", "cable"].each do |db|
+        [ "cache", "queue", "cable" ].each do |db|
           config = ActiveRecord::Base.configurations.configs_for(env_name: "test", name: db)
           ActiveRecord::Base.establish_connection(config)
           ActiveRecord::Tasks::DatabaseTasks.create(config)
