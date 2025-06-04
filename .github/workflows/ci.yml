@@ -29,13 +29,27 @@ jobs:
           gem install bundler
           bundle install
       
-      - name: Setup database
+      - name: Create migration directories
         run: |
-          bundle exec rails db:create
+          mkdir -p db/migrate
+          mkdir -p db/cache_migrate
+          mkdir -p db/queue_migrate
+          mkdir -p db/cable_migrate
+      
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+        run: |
+          bundle exec rails db:test:prepare
           bundle exec rails db:schema:load
           bundle exec rails db:migrate
+          bundle exec rails db:migrate:cache
+          bundle exec rails db:migrate:queue
+          bundle exec rails db:migrate:cable
       
       - name: Run tests
+        env:
+          RAILS_ENV: test
         run: bundle exec rails test
       
       - name: Run security checks
