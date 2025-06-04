@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: rails
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: bundle exec rails s
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rails_postgres_primary
+          property: connectionString
+      - key: CACHE_DATABASE_URL
+        fromDatabase:
+          name: rails_postgres_cache
+          property: connectionString
+      - key: QUEUE_DATABASE_URL
+        fromDatabase:
+          name: rails_postgres_queue
+          property: connectionString
+      - key: CABLE_DATABASE_URL
+        fromDatabase:
+          name: rails_postgres_cable
+          property: connectionString
+
+databases:
+  - name: rails_postgres_primary
+    databaseName: rails_production
+    ipAllowList: []
+  - name: rails_postgres_cache
+    databaseName: rails_production_cache
+    ipAllowList: []
+  - name: rails_postgres_queue
+    databaseName: rails_production_queue
+    ipAllowList: []
+  - name: rails_postgres_cable
+    databaseName: rails_production_cable
+    ipAllowList: [] 
