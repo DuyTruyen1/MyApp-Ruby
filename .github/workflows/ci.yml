@@ -40,12 +40,7 @@ jobs:
         env:
           RAILS_ENV: test
         run: |
-          bundle exec rails db:test:prepare
-          bundle exec rails db:schema:load
-          bundle exec rails db:migrate
-          bundle exec rails db:migrate:cache
-          bundle exec rails db:migrate:queue
-          bundle exec rails db:migrate:cable
+          bundle exec rails db:migrate:test:prepare
       
       - name: Run tests
         env:
